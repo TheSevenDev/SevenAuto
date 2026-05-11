@@ -12,6 +12,10 @@ cd "$ROOT/dashboard" || {
   exit 1
 }
 
+# Turbo TUI + integrated terminals can leak mouse-reporting sequences to the
+# shell prompt after the hook. Stream UI avoids enabling xterm mouse mode.
+export TURBO_UI=false
+
 pnpm lint
 pnpm check-types
 pnpm format:check
