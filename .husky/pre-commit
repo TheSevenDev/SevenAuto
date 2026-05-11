@@ -1,0 +1,18 @@
+#!/usr/bin/env sh
+set -eu
+
+# Skip in CI (no local dashboard install / no need to block pipelines on hooks)
+if [ -n "${CI:-}" ]; then
+  exit 0
+fi
+
+ROOT="$(git rev-parse --show-toplevel)"
+cd "$ROOT/dashboard" || {
+  echo "husky(pre-commit): dashboard/ not found" >&2
+  exit 1
+}
+
+pnpm lint
+pnpm check-types
+pnpm format:check
+pnpm build

@@ -4,13 +4,18 @@
 
 | Path | Role |
 |------|------|
+| `package.json`, `.husky/` (repo root) | Husky — run `pnpm install` at root after clone so Git `pre-commit` runs checks in `dashboard/` |
 | `dashboard/apps/web` | Next.js 16 frontend |
 | `dashboard/apps/api` | NestJS 11 API, Prisma, strict env validation |
 | `dashboard/packages/libs` | Shared types (`@repo/libs`) |
 | `dashboard/packages/ui` | Shared UI (`@repo/ui`) |
 | `dashboard/packages/eslint-config`, `typescript-config` | Shared tooling configs |
 
-All pnpm commands are run from **`dashboard/`**.
+All pnpm commands for apps are run from **`dashboard/`**. After cloning, run **`pnpm install` once at the repository root** so Husky can wire Git hooks (see root `package.json` and `.husky/pre-commit`).
+
+## Git hooks (Husky)
+
+On every `git commit` (local, not when `CI` is set), `.husky/pre-commit` runs in `dashboard/`: `pnpm lint`, `pnpm check-types`, `pnpm format:check`, `pnpm build`. Install the hook helper from the repo root: `pnpm install` (see root `README.md`).
 
 ## API environment
 
@@ -25,10 +30,11 @@ See `apps/api/.env.example` for the full list of keys and short comments. Source
 
 ## Local development
 
-1. Install dependencies: `pnpm install` (from `dashboard/`).
-2. Ensure MySQL (or compatible DB for `DATABASE_URL`), Redis, and any S3/email services you enable match `.env`.
-3. Sync the database schema when `prisma/schema.prisma` changes (from `apps/api/`), e.g. `pnpm exec prisma db push` for local prototyping, or `pnpm exec prisma migrate dev` once your team adds a migrations workflow.
-4. `pnpm dev` runs Turbo `dev` for all packages that define it (typically `web` + `api`).
+1. Install Git hooks: `pnpm install` from the **repository root** (parent of `dashboard/`).
+2. Install app dependencies: `pnpm install` from `dashboard/`.
+3. Ensure MySQL (or compatible DB for `DATABASE_URL`), Redis, and any S3/email services you enable match `.env`.
+4. Sync the database schema when `prisma/schema.prisma` changes (from `apps/api/`), e.g. `pnpm exec prisma db push` for local prototyping, or `pnpm exec prisma migrate dev` once your team adds a migrations workflow.
+5. `pnpm dev` runs Turbo `dev` for all packages that define it (typically `web` + `api`).
 
 ## Deployment notes
 
@@ -43,5 +49,6 @@ From `dashboard/`:
 
 - `pnpm lint`
 - `pnpm check-types`
+- `pnpm format:check`
 
-CI should run the same commands on every change touching `dashboard/`.
+CI should run the same commands on every change touching `dashboard/` (including `pnpm format:check`).

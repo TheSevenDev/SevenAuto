@@ -5,9 +5,17 @@ Monorepo cho dashboard (Next.js + NestJS). Mã nguồn ứng dụng nằm trong 
 ## Yêu cầu
 
 - Node.js 18+
-- [pnpm](https://pnpm.io/) 9 (repo dùng `packageManager` trong `dashboard/package.json`)
+- [pnpm](https://pnpm.io/) 9 (`packageManager` trong `package.json` ở root và trong `dashboard/package.json`)
 
 ## Bắt đầu nhanh
+
+1. **Git hooks (Husky)** — chạy một lần ở **thư mục gốc repo** (cùng cấp với `.git`):
+
+```sh
+pnpm install
+```
+
+2. **Ứng dụng** — dependency và lệnh dev/build trong `dashboard/`:
 
 ```sh
 cd dashboard
@@ -15,6 +23,8 @@ pnpm install
 cp apps/api/.env.example apps/api/.env   # chỉnh giá trị thật trước khi chạy API
 pnpm dev
 ```
+
+Mỗi lần `git commit`, hook `pre-commit` chạy (trừ khi `CI` được set): `lint` → `check-types` → `format:check` → `build` trong `dashboard/`. Bỏ qua hook (không khuyến khích): `git commit --no-verify`.
 
 - Web mặc định: [http://localhost:3000](http://localhost:3000)
 - API: cổng và prefix lấy từ biến môi trường (`PORT`, `API_VERSION`); Swagger (nếu bật) xem log khi khởi động Nest.
@@ -28,6 +38,12 @@ pnpm dev
 | `pnpm build` | Build production |
 | `pnpm lint` | ESLint |
 | `pnpm check-types` | Kiểm tra TypeScript |
+| `pnpm format:check` | Kiểm tra Prettier (không ghi file) |
+
+## Git hooks (Husky)
+
+- Cài ở **root repo**: `pnpm install` (cài `husky`, gắn `core.hooksPath`).
+- Mỗi commit chạy kiểm tra trong `dashboard/`: lint, types, Prettier check, build. Trên CI đặt `CI=true` thì hook thoát ngay (tránh chạy lại trong pipeline nếu có commit).
 
 ## Tài liệu thêm
 
@@ -43,6 +59,8 @@ pnpm dev
 
 ```text
 SevenAuto/
+├── .husky/             # Git hooks (Husky)
+├── package.json        # Husky + prepare (cùng cấp .git)
 ├── dashboard/          # Turborepo (apps + packages) — chạy pnpm tại đây
 │   ├── apps/web        # Next.js
 │   ├── apps/api        # NestJS + Prisma

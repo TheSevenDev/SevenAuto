@@ -1,5 +1,10 @@
 import { filterXSS, getDefaultWhiteList, escapeAttrValue } from 'xss';
-import { ArgumentMetadata, Injectable, Logger, PipeTransform } from '@nestjs/common';
+import {
+  ArgumentMetadata,
+  Injectable,
+  Logger,
+  PipeTransform,
+} from '@nestjs/common';
 
 const whiteList = {
   ...getDefaultWhiteList(),
@@ -38,7 +43,10 @@ export class XSSFilterPipe implements PipeTransform {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   transform(value: any, metadata: ArgumentMetadata): any {
     try {
-      if (metadata && excludeDto.some((item) => metadata.metatype?.name.includes(item))) {
+      if (
+        metadata &&
+        excludeDto.some((item) => metadata.metatype?.name.includes(item))
+      ) {
         return value;
       }
       if (value == null) return value;
@@ -46,7 +54,10 @@ export class XSSFilterPipe implements PipeTransform {
       if (typeof value === 'object') {
         for (const [key, val] of Object.entries(value)) {
           if (typeof val === 'string') {
-            (value as Record<string, unknown>)[key] = filterXSS(val, xssOptions).trim();
+            (value as Record<string, unknown>)[key] = filterXSS(
+              val,
+              xssOptions,
+            ).trim();
           }
         }
       }

@@ -7,13 +7,15 @@
   - **`apps/api`**: backend NestJS; **bắt buộc** có file `.env` đủ biến (xem `.env.example`).
 - **`tools/`**: placeholder cho công cụ phụ trợ sau này — **không** dùng để chạy app; mọi lệnh dev/build chạy trong `dashboard/`.
 - **`docs/`**: tài liệu chi tiết hơn (file tiếng Anh `getting-started.md` mô tả triển khai và env).
+- **Root** (`package.json`, `.husky/`): Husky — `pnpm install` tại root để gắn hook `pre-commit` (lint, type, format check, build trong `dashboard/`).
 
 ## Làm việc hằng ngày
 
-1. `cd dashboard && pnpm install`
-2. Tạo env API: `cp apps/api/.env.example apps/api/.env` rồi sửa giá trị thật.
-3. Chạy dev: `pnpm dev`
-4. Chỉ web hoặc API: `pnpm dev:web` / `pnpm dev:api`
+1. **Root repo:** `pnpm install` (bật Husky / Git hooks).
+2. `cd dashboard && pnpm install`
+3. Tạo env API: `cp apps/api/.env.example apps/api/.env` rồi sửa giá trị thật.
+4. Chạy dev: `pnpm dev`
+5. Chỉ web hoặc API: `pnpm dev:web` / `pnpm dev:api`
 
 ## Lưu ý triển khai (production)
 

@@ -14,9 +14,10 @@ export interface Response<T> {
 const EXCLUDE_PATHS = ['pdf'];
 
 @Injectable()
-export class TransformResponseInterceptor<T>
-  implements NestInterceptor<T, Response<T>>
-{
+export class TransformResponseInterceptor<T> implements NestInterceptor<
+  T,
+  Response<T>
+> {
   intercept(
     context: ExecutionContext,
     next: CallHandler,

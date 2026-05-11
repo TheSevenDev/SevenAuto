@@ -7,5 +7,5 @@ alwaysApply: true
 
 - Monorepo code lives under `dashboard/`: Turborepo + pnpm. Apps: `apps/web` (Next), `apps/api` (Nest). Shared: `packages/ui`, `packages/libs`, `packages/eslint-config`, `packages/typescript-config`.
 - From `dashboard/`, use `pnpm dev`, `pnpm build`, `pnpm lint`, `pnpm check-types`.
-- Root `README.md` and `docs/getting-started.md` document onboarding; run pnpm from `dashboard/` only (`tools/` is a placeholder, not for running the app).
+- Root `README.md` and `docs/getting-started.md` document onboarding; run app pnpm from `dashboard/`; run **`pnpm install` at repo root** for Husky (`tools/` is a placeholder, not for running the app).
 - When changing the API, read `src/modules/app.module.ts` and `src/modules/env/env.service.ts` for env contract and global wiring.
