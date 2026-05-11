@@ -7,8 +7,8 @@
 | `package.json`, `.husky/` (repo root) | Husky — run `pnpm install` at root after clone so Git `pre-commit` runs checks in `dashboard/` |
 | `dashboard/apps/web` | Next.js 16 frontend |
 | `dashboard/apps/api` | NestJS 11 API, Prisma, strict env validation |
-| `dashboard/packages/libs` | Shared types (`@repo/libs`) |
-| `dashboard/packages/ui` | Shared UI (`@repo/ui`) |
+| `dashboard/packages/libs` | Shared types (`@seven-auto/libs`) |
+| `dashboard/packages/ui` | Shared UI (`@seven-auto/ui`) |
 | `dashboard/packages/eslint-config`, `typescript-config` | Shared tooling configs |
 
 All pnpm commands for apps are run from **`dashboard/`**. After cloning, run **`pnpm install` once at the repository root** so Husky can wire Git hooks (see root `package.json` and `.husky/pre-commit`).

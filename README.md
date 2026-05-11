@@ -64,7 +64,7 @@ SevenAuto/
 ├── dashboard/          # Turborepo (apps + packages) — chạy pnpm tại đây
 │   ├── apps/web        # Next.js
 │   ├── apps/api        # NestJS + Prisma
-│   └── packages/       # @repo/ui, @repo/libs, configs
+│   └── packages/       # @seven-auto/ui, @seven-auto/libs, configs
 ├── docs/               # Hướng dẫn phát triển & triển khai
 ├── tools/              # Placeholder (script/tooling ngoài dashboard)
 ├── AGENTS.md

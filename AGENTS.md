@@ -2,7 +2,7 @@
 
 ## Layout
 
-- `dashboard/`: Turborepo (pnpm) — `apps/web` (Next.js 16), `apps/api` (NestJS 11), `packages/*` (`@repo/ui`, `@repo/libs`, configs).
+- `dashboard/`: Turborepo (pnpm) — `apps/web` (Next.js 16), `apps/api` (NestJS 11), `packages/*` (`@seven-auto/ui`, `@seven-auto/libs`, configs).
 - Root `package.json` + `.husky/`: Husky — run `pnpm install` at the **repository root** after clone so `pre-commit` runs `lint`, `check-types`, `format:check`, and `build` under `dashboard/` (skipped when `CI` is set).
 - `tools/`: placeholder for auxiliary scripts/tooling outside the app monorepo (see `tools/README.md`); **do not** use it as the primary way to run `dashboard/`.
 - `docs/`: human onboarding — `getting-started.md` (EN), `getting-started-vi.md` (VI); API env template: `dashboard/apps/api/.env.example`.
@@ -23,7 +23,7 @@
 
 ## Shared types
 
-- Package `@repo/libs` — `export` map: `"."` → `src/index.ts` (import as `@repo/libs`).
+- Package `@seven-auto/libs` — `export` map: `"."` → `src/index.ts` (import as `@seven-auto/libs`).
 
 ## Conventions
 

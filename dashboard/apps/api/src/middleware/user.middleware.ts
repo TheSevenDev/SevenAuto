@@ -1,4 +1,4 @@
-import { IUser } from '@repo/libs';
+import { IUser } from '@seven-auto/libs';
 import { Injectable, NestMiddleware } from '@nestjs/common';
 import { NextFunction, Request, Response } from 'express';
 

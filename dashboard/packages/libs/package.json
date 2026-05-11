@@ -1,5 +1,5 @@
 {
-  "name": "@repo/libs",
+  "name": "@seven-auto/libs",
   "version": "0.0.0",
   "private": true,
   "exports": {
@@ -13,8 +13,8 @@
     "check-types": "tsc --noEmit"
   },
   "devDependencies": {
-    "@repo/eslint-config": "workspace:*",
-    "@repo/typescript-config": "workspace:*",
+    "@seven-auto/eslint-config": "workspace:*",
+    "@seven-auto/typescript-config": "workspace:*",
     "eslint": "^9.39.1",
     "typescript": "5.9.2"
   },

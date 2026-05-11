@@ -8,9 +8,6 @@ importers:
 
   .:
     devDependencies:
-      husky:
-        specifier: ^9.1.7
-        version: 9.1.7
       prettier:
         specifier: ^3.7.4
         version: 3.7.4
@@ -53,7 +50,7 @@ importers:
       '@prisma/client':
         specifier: ^7.8.0
         version: 7.8.0(prisma@7.8.0(@types/react-dom@19.2.2(@types/react@19.2.2))(@types/react@19.2.2)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(typescript@5.9.2))(typescript@5.9.2)
-      '@repo/libs':
+      '@seven-auto/libs':
         specifier: workspace:*
         version: link:../../packages/libs
       axios:
@@ -99,10 +96,10 @@ importers:
       '@nestjs/testing':
         specifier: ^11.0.1
         version: 11.1.19(@nestjs/common@11.1.19(class-transformer@0.5.1)(class-validator@0.15.1)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.19(@nestjs/common@11.1.19(class-transformer@0.5.1)(class-validator@0.15.1)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/platform-express@11.1.19)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/platform-express@11.1.19(@nestjs/common@11.1.19(class-transformer@0.5.1)(class-validator@0.15.1)(reflect-metadata@0.2.2)(rxjs@7.8.2))(@nestjs/core@11.1.19))
-      '@repo/eslint-config':
+      '@seven-auto/eslint-config':
         specifier: workspace:*
         version: link:../../packages/eslint-config
-      '@repo/typescript-config':
+      '@seven-auto/typescript-config':
         specifier: workspace:*
         version: link:../../packages/typescript-config
       '@types/body-parser':
@@ -156,7 +153,7 @@ importers:
 
   apps/web:
     dependencies:
-      '@repo/ui':
+      '@seven-auto/ui':
         specifier: workspace:*
         version: link:../../packages/ui
       next:
@@ -169,10 +166,10 @@ importers:
         specifier: ^19.2.0
         version: 19.2.0(react@19.2.0)
     devDependencies:
-      '@repo/eslint-config':
+      '@seven-auto/eslint-config':
         specifier: workspace:*
         version: link:../../packages/eslint-config
-      '@repo/typescript-config':
+      '@seven-auto/typescript-config':
         specifier: workspace:*
         version: link:../../packages/typescript-config
       '@types/node':
@@ -229,10 +226,10 @@ importers:
 
   packages/libs:
     devDependencies:
-      '@repo/eslint-config':
+      '@seven-auto/eslint-config':
         specifier: workspace:*
         version: link:../eslint-config
-      '@repo/typescript-config':
+      '@seven-auto/typescript-config':
         specifier: workspace:*
         version: link:../typescript-config
       eslint:
@@ -253,10 +250,10 @@ importers:
         specifier: ^19.2.0
         version: 19.2.0(react@19.2.0)
     devDependencies:
-      '@repo/eslint-config':
+      '@seven-auto/eslint-config':
         specifier: workspace:*
         version: link:../eslint-config
-      '@repo/typescript-config':
+      '@seven-auto/typescript-config':
         specifier: workspace:*
         version: link:../typescript-config
       '@types/node':
@@ -2939,11 +2936,6 @@ packages:
   human-signals@2.1.0:
     resolution: {integrity: sha512-B4FFZ6q/T2jhhksgkbEW3HBvWIfDW85snkQgawt07S7J5QXTk6BkNV+0yAeZrM5QpMAdYlocGoljn0sJ/WQkFw==}
     engines: {node: '>=10.17.0'}
-
-  husky@9.1.7:
-    resolution: {integrity: sha512-5gs5ytaNjBrh5Ow3zrvdUUY+0VxIuWVL4i9irt6friV+BqdCfmV11CQTWMiBYWHbXhco+J1kHfTOUkePhCDvMA==}
-    engines: {node: '>=18'}
-    hasBin: true
 
   iconv-lite@0.7.2:
     resolution: {integrity: sha512-im9DjEDQ55s9fL4EYzOAv0yMqmMBSZp6G0VvFyTMPKWxiSBHUj9NW/qqLmXUwXrrM7AvqSlTCfvqRb0cM8yYqw==}
@@ -7622,8 +7614,6 @@ snapshots:
       - supports-color
 
   human-signals@2.1.0: {}
-
-  husky@9.1.7: {}
 
   iconv-lite@0.7.2:
     dependencies:
