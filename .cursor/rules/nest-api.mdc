@@ -1,0 +1,13 @@
+---
+description: NestJS API app conventions (SevenAuto)
+globs: dashboard/apps/api/**/*.ts
+alwaysApply: false
+---
+
+# API (`dashboard/apps/api`)
+
+- Path alias: `src/...` from `baseUrl` and Nest layout.
+- Add providers to the correct module; `GlobalModule` is minimal. Add Prisma, auth, or other modules when implemented.
+- Middleware: use Express `Request` and `Response` from `express`, not the DOM `Request` type.
+- HTTP: `ApiHelper` uses `axios` types; keep `HttpModule` from `@nestjs/axios` registered in `GlobalModule`.
+- Do not reintroduce imports to missing modules (`PrismaModule`, `auth.service`, etc.) without adding those files.

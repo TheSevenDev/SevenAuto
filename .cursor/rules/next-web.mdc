@@ -1,0 +1,10 @@
+---
+description: Next.js web app conventions (SevenAuto)
+globs: dashboard/apps/web/**/*.{tsx,ts,css}
+alwaysApply: false
+---
+
+# Web (`dashboard/apps/web`)
+
+- Next.js App Router; shared UI: `@repo/ui`.
+- Dev server uses port 3000 per `package.json` scripts; run from `dashboard/` with `pnpm dev`.
