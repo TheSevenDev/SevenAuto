@@ -29,11 +29,11 @@ export interface IDotEnv {
 
   //Database
   DATABASE_URL: string;
-  MYSQL_HOST: string;
-  MYSQL_PORT: number;
-  MYSQL_DATABASE: string;
-  MYSQL_USER: string;
-  MYSQL_PASSWORD: string;
+  DATABASE_HOST: string;
+  DATABASE_PORT: number;
+  DATABASE_DATABASE: string;
+  DATABASE_USER: string;
+  DATABASE_PASSWORD: string;
 
   //Redis
   REDIS_HOST: string;

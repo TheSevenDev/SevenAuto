@@ -1,4 +1,19 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+export type SortOrder = 'asc' | 'desc';
+
+export type SortOrderInput = {
+  sort: SortOrder;
+  nulls?: 'first' | 'last';
+};
+
+export type JsonValue =
+  | string
+  | number
+  | boolean
+  | null
+  | { [key: string]: JsonValue }
+  | JsonValue[];
+
 export type ActionMapType<M extends { [index: string]: any }> = {
   [Key in keyof M]: M[Key] extends undefined
     ? {
@@ -29,9 +44,9 @@ export const EDataSelect = {
 
 export type EDataSelect = (typeof EDataSelect)[keyof typeof EDataSelect];
 
-export interface ISelect {
+export type ISelect = {
   select?: EDataSelect;
-}
+};
 
 export const EStatus = {
   ACTIVE: 'ACTIVE',
@@ -57,16 +72,17 @@ export const ELanguage = {
 
 export type ELanguage = (typeof ELanguage)[keyof typeof ELanguage];
 
-export interface IFindMany {
+export type IFindMany = {
   take?: number;
   skip?: number;
+  filter?: string;
   select?: EDataSelect;
   includeIds?: string[];
   excludeIds?: string[];
-  startDate?: string;
-  endDate?: string;
-  orderBy?: any;
-}
+  startDate?: Date | string;
+  endDate?: Date | string;
+  orderBy?: IOrderBy;
+};
 
 export type IBaseEntity = {
   id: string;
@@ -74,4 +90,6 @@ export type IBaseEntity = {
   updatedAt: Date;
 };
 
-export type IOrderBy = Record<string, 'ASC' | 'DESC'>;
+export type IOrderBy = {
+  [key: string]: SortOrder | SortOrderInput | IOrderBy;
+};

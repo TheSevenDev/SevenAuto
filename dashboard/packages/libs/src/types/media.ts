@@ -1,7 +1,7 @@
-import { IBaseEntity, IFindMany } from './utils';
 import { IUser } from './user';
+import { IBaseEntity, IFindMany, IOrderBy } from './utils';
 
-export interface IMedia extends IBaseEntity {
+export type IMedia = IBaseEntity & {
   title?: string;
   alt?: string;
   ext?: string;
@@ -19,7 +19,7 @@ export interface IMedia extends IBaseEntity {
   createdBy?: IUser;
   type?: EMediaType;
   source?: EMediaSource;
-}
+};
 
 export const EMediaSource = {
   LOCAL: 'LOCAL',
@@ -53,7 +53,7 @@ export interface IMediaFindMany extends IFindMany {
   createdAt_lte?: Date;
   updatedAt_gte?: Date;
   updatedAt_lte?: Date;
-  orderBy?: Record<string, 'ASC' | 'DESC'>;
+  orderBy?: IOrderBy;
 }
 
 export interface IMediaSaveRemote {

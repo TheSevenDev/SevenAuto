@@ -1,0 +1,14 @@
+{
+  "name": "Seven Auto",
+  "short_name": "Seven Auto",
+  "display": "standalone",
+  "start_url": "/",
+  "theme_color": "#000000",
+  "background_color": "#ffffff",
+  "icons": [
+    {
+      "src": "/images/favicon.png",
+      "type": "image/png"
+    }
+  ]
+}

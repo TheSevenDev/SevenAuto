@@ -1,8 +1,14 @@
 import { IMedia } from './media';
 import { IRole } from './role';
-import { IFindMany, IOrderBy, ELanguage, IBaseEntity } from './utils';
+import {
+  ELanguage,
+  IBaseEntity,
+  IFindMany,
+  IOrderBy,
+  JsonValue,
+} from './utils';
 
-export interface IUser extends IBaseEntity {
+export type IUser = IBaseEntity & {
   email?: string;
   fullname?: string;
   username?: string;
@@ -13,28 +19,35 @@ export interface IUser extends IBaseEntity {
   region?: string;
   city?: string;
   zipCode?: string;
-  socials?: string;
+  socials?: JsonValue;
   about?: string;
   content?: string;
   isVerified?: boolean;
   status?: EUserStatus;
+  setting?: IUserSetting;
   deleted?: boolean;
   avatarId?: string;
   avatar?: IMedia;
+  coverId?: string;
+  cover?: IMedia;
   roleId?: string;
   role?: IRole;
   referrerId?: string;
   referrer?: IUser;
   language?: ELanguage;
   metas?: IUserMeta[];
-}
+  level?: EUserLevel;
+  lastActivity?: Date;
+  credits?: number;
+  commissions?: number;
+};
 
-export interface IUserMeta extends IBaseEntity {
+export type IUserMeta = IBaseEntity & {
   key?: string;
-  value?: string;
+  value?: JsonValue;
   userId?: string;
   user?: IUser;
-}
+};
 
 export const EUserStatus = {
   PENDING: 'PENDING',
@@ -54,38 +67,105 @@ export const EUserGender = {
 
 export type EUserGender = (typeof EUserGender)[keyof typeof EUserGender];
 
-export interface IUserFindOne {
+export const EUserLevel = {
+  BASIC: 'BASIC',
+  PRO: 'PRO',
+  PREMIUM: 'PREMIUM',
+};
+
+export type EUserLevel = (typeof EUserLevel)[keyof typeof EUserLevel];
+
+export const EActivityStatus = {
+  ONLINE: 'ONLINE',
+  OFFLINE: 'OFFLINE',
+  ALWAY: 'ALWAY',
+  BUSY: 'BUSY',
+};
+
+export type EActivityStatus =
+  (typeof EActivityStatus)[keyof typeof EActivityStatus];
+
+export type IUserFindOne = {
   id?: string;
   email?: string;
   username?: string;
   address?: string;
-}
-export interface IUserFindMany extends IFindMany {
+};
+export type IUserFindMany = IFindMany & {
+  referrerId?: string;
+  roleId?: string;
+  levels?: EUserLevel[];
+  isVerified?: boolean;
   status?: EUserStatus[];
   genders?: EUserGender[];
   deleted?: number;
   orderBy?: IOrderBy;
-}
+};
 
 export interface IUserCreate {
   email: string;
   fullname: string;
   username?: string;
-  gender?: EUserGender;
+  password?: string;
   status?: EUserStatus;
   avatarId?: string;
+  coverId?: string;
+  sendMail?: boolean;
+  roleId?: string;
+  isVerified?: boolean;
   address?: string;
   country?: string;
   region?: string;
   city?: string;
   zipCode?: string;
-  socials?: string;
+  socials?: Record<string, unknown>;
   about?: string;
   phone?: string;
+  level?: EUserLevel;
   referrerId?: string;
+  credits?: number;
+  commissions?: number;
   language?: ELanguage;
+  gender?: EUserGender;
 }
 
-export interface IUserUpdate extends Partial<IUserCreate> {
+export type IUserUpdate = Partial<IUserCreate> & {
   id: string;
+  setting?: IUserSetting;
+};
+
+export interface IUserSocialCard {
+  avatar: string;
+  fullname: string;
+  level: EUserLevel;
+}
+
+export type IUserSetting = {
+  notification: {
+    like: boolean;
+    comment: boolean;
+    payment: boolean;
+  };
+  email: {
+    like: boolean;
+    comment: boolean;
+    payment: boolean;
+  };
+};
+
+export const DEFAULT_USER_SETTING: IUserSetting = {
+  notification: {
+    like: true,
+    comment: true,
+    payment: true,
+  },
+  email: {
+    like: true,
+    comment: true,
+    payment: true,
+  },
+};
+
+export interface IUserStats {
+  postCount: number;
 }

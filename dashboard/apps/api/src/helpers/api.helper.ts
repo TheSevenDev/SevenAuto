@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Injectable, Logger } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
+import { Injectable, Logger } from '@nestjs/common';
 import { AxiosRequestConfig, AxiosResponse } from 'axios';
-import { firstValueFrom, catchError, timeout } from 'rxjs';
+import { catchError, firstValueFrom, timeout } from 'rxjs';
 
 export interface RequestOptions extends AxiosRequestConfig {
   timeoutMs?: number;

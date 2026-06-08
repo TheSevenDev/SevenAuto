@@ -1,9 +1,11 @@
 {
   "$schema": "https://turborepo.dev/schema.json",
   "globalEnv": [
-    "NODE_ENV"
+    "NODE_ENV",
+    "APP_NODE_ENV",
+    "DOTENV_CONFIG_QUIET"
   ],
-  "ui": "tui",
+  "ui": "stream",
   "tasks": {
     "build": {
       "dependsOn": [
@@ -27,6 +29,16 @@
     "check-types": {
       "dependsOn": [
         "^check-types"
+      ]
+    },
+    "test": {
+      "dependsOn": [
+        "^test"
+      ]
+    },
+    "format": {
+      "dependsOn": [
+        "^format"
       ]
     },
     "dev": {

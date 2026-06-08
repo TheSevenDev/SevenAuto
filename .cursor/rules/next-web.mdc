@@ -7,4 +7,4 @@ alwaysApply: false
 # Web (`dashboard/apps/web`)
 
 - Next.js App Router; shared UI: `@seven-auto/ui`.
-- Dev server uses port 3000 per `package.json` scripts; run from `dashboard/` with `pnpm dev`.
+- Dev server uses port 7272 per `package.json` scripts; run from `dashboard/` with `pnpm dev`.

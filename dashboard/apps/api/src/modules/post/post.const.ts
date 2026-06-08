@@ -1,0 +1,5 @@
+export const postMetaKey = {
+  POST_KEY_UPDATE: 'POST_KEY_UPDATE',
+  POST_CLICK: 'POST_CLICK',
+  POST_FEATURED: 'POST_FEATURED',
+};

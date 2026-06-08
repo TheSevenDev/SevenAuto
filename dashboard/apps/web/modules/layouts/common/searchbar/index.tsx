@@ -1,0 +1,190 @@
+import Box from '@mui/material/Box';
+import Dialog, { dialogClasses } from '@mui/material/Dialog';
+import IconButton from '@mui/material/IconButton';
+import InputAdornment from '@mui/material/InputAdornment';
+import InputBase from '@mui/material/InputBase';
+import List from '@mui/material/List';
+import Stack from '@mui/material/Stack';
+import { useTheme } from '@mui/material/styles';
+import match from 'autosuggest-highlight/match';
+import parse from 'autosuggest-highlight/parse';
+import Iconify from 'modules/components/iconify';
+import Label from 'modules/components/label';
+import Scrollbar from 'modules/components/scrollbar';
+import SearchNotFound from 'modules/components/search-not-found';
+import { useBoolean } from 'modules/hooks/use-boolean';
+import { useEventListener } from 'modules/hooks/use-event-listener';
+import { useResponsive } from 'modules/hooks/use-responsive';
+import { useNavData } from 'modules/layouts/dashboard/config-navigation';
+import { useTranslate } from 'modules/locales';
+import { useRouter } from 'modules/routes/hooks';
+import { memo, useCallback, useState } from 'react';
+
+import ResultItem from './result-item';
+import { applyFilter, getAllItems, groupedData } from './utils';
+
+// ----------------------------------------------------------------------
+
+function Searchbar() {
+  const theme = useTheme();
+  const { t } = useTranslate();
+
+  const router = useRouter();
+
+  const search = useBoolean();
+
+  const lgUp = useResponsive('up', 'lg');
+
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const navData = useNavData();
+
+  const handleClose = useCallback(() => {
+    search.onFalse();
+    setSearchQuery('');
+  }, [search]);
+
+  const handleKeyDown = (event: KeyboardEvent) => {
+    if (event.key === 'k' && event.metaKey) {
+      search.onToggle();
+      setSearchQuery('');
+    }
+  };
+
+  useEventListener('keydown', handleKeyDown);
+
+  const handleClick = useCallback(
+    (path: string) => {
+      if (path.includes('http')) {
+        window.open(path);
+      } else {
+        router.push(path);
+      }
+      handleClose();
+    },
+    [handleClose, router],
+  );
+
+  const handleSearch = useCallback(
+    (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+      setSearchQuery(event.target.value);
+    },
+    [],
+  );
+
+  const dataFiltered = applyFilter({
+    inputData: getAllItems({ data: navData }),
+    query: searchQuery,
+  });
+
+  const notFound = searchQuery && !dataFiltered.length;
+
+  const renderItems = () => {
+    const data = groupedData(dataFiltered);
+
+    return Object.keys(data)
+      .sort((a, b) => -b.localeCompare(a))
+      .map((group, index) => (
+        <List key={group || index} disablePadding>
+          {data[group]?.map((item) => {
+            const { title, path } = item;
+
+            const partsTitle = parse(title, match(title, searchQuery));
+
+            const partsPath = parse(path, match(path, searchQuery));
+
+            return (
+              <ResultItem
+                path={partsPath}
+                title={partsTitle}
+                key={`${title}${path}`}
+                groupLabel={searchQuery && group}
+                onClickItem={() => handleClick(path)}
+              />
+            );
+          })}
+        </List>
+      ));
+  };
+
+  const renderButton = (
+    <Stack sx={{ alignItems: 'center', flexDirection: 'row' }}>
+      <IconButton onClick={search.onTrue}>
+        <Iconify icon="eva:search-fill" />
+      </IconButton>
+
+      {lgUp && (
+        <Label sx={{ px: 0.75, fontSize: 12, color: 'text.secondary' }}>
+          ⌘K
+        </Label>
+      )}
+    </Stack>
+  );
+
+  return (
+    <>
+      {renderButton}
+
+      <Dialog
+        fullWidth
+        maxWidth="sm"
+        open={search.value}
+        onClose={handleClose}
+        transitionDuration={{
+          enter: theme.transitions.duration.shortest,
+          exit: 0,
+        }}
+        slotProps={{
+          paper: {
+            sx: {
+              mt: 15,
+              overflow: 'unset',
+            },
+          },
+        }}
+        sx={{
+          [`& .${dialogClasses.container}`]: {
+            alignItems: 'flex-start',
+          },
+        }}
+      >
+        <Box sx={{ p: 3, borderBottom: `solid 1px ${theme.palette.divider}` }}>
+          <InputBase
+            fullWidth
+            autoFocus
+            placeholder={t('basic.search_placeholder')}
+            value={searchQuery}
+            onChange={handleSearch}
+            startAdornment={
+              <InputAdornment position="start">
+                <Iconify
+                  icon="eva:search-fill"
+                  width={24}
+                  sx={{ color: 'text.disabled' }}
+                />
+              </InputAdornment>
+            }
+            endAdornment={
+              <Label sx={{ letterSpacing: 1, color: 'text.secondary' }}>
+                esc
+              </Label>
+            }
+            inputProps={{
+              sx: { typography: 'h6' },
+            }}
+          />
+        </Box>
+
+        <Scrollbar sx={{ p: 3, pt: 2, height: 400 }}>
+          {notFound ? (
+            <SearchNotFound query={searchQuery} sx={{ py: 10 }} />
+          ) : (
+            renderItems()
+          )}
+        </Scrollbar>
+      </Dialog>
+    </>
+  );
+}
+
+export default memo(Searchbar);

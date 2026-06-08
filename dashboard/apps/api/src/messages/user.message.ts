@@ -1,0 +1,16 @@
+export const userError = {
+  user_not_found: 'users.error.user_not_found',
+  not_found: 'users.error.not_found',
+  email_required: 'users.error.email_required',
+  email_exists: 'users.error.email_exists',
+  fullname_required: 'users.error.fullname_required',
+  does_not_allowed: 'users.error.does_not_allowed',
+  username_exists: 'users.error.username_exists',
+  phone_exists: 'users.error.phone_exists',
+  cannot_delete_ai_user: 'users.error.cannot_delete_ai_user',
+  cannot_follow_yourself: 'users.error.cannot_follow_yourself',
+  user_not_public: 'users.error.user_not_public',
+  media_not_found: 'users.error.media_not_found',
+  media_exists: 'users.error.media_exists',
+  invalid_coach_review_price: 'users.error.invalid_coach_review_price',
+};

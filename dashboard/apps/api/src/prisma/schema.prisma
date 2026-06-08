@@ -1,0 +1,454 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Option {
+  id String @id @default(uuid())
+
+  key   String? @unique
+  value String? @db.Text
+
+  updatedAt DateTime? @updatedAt
+  createdAt DateTime  @default(now())
+
+  @@map("options")
+}
+
+model User {
+  id String @id @default(uuid())
+
+  email       String?      @unique(map: "users.email_unique")
+  username    String?      @unique(map: "users.username_unique")
+  fullname    String?
+  password    String?
+  phone       String?      @unique(map: "users.phone_unique")
+  country     String?
+  address     String?
+  region      String?
+  city        String?
+  zipCode     String?
+  socials     Json?        @db.JsonB
+  about       String?      @db.Text
+  content     String?
+  isVerified  Boolean?     @default(false)
+  deleted     Boolean?     @default(false)
+  gender      EUserGender? @default(MALE)
+  status      EUserStatus
+  level       EUserLevel   @default(BASIC)
+  referrerId  String?
+  referrer    User?        @relation("user_relation_referrer", fields: [referrerId], references: [id], onDelete: SetNull)
+  score       Int?         @default(0)
+  credits     Float?       @default(0)
+  commissions Float?       @default(0)
+
+  avatarId       String?
+  avatar         Media?           @relation("media_user_avatar", fields: [avatarId], references: [id], onDelete: SetNull, map: "user_ibfk_2")
+  coverId        String?
+  cover          Media?           @relation("media_user_cover", fields: [coverId], references: [id], onDelete: SetNull, map: "user_ibfk_3")
+  roleId         String?
+  role           Role?            @relation("user_relation_role", fields: [roleId], references: [id], onDelete: SetNull)
+  lastActivity   DateTime?
+  activityStatus EActivityStatus? @default(ONLINE)
+  language       ELanguage?       @default(vi)
+
+  medias        Media[]            @relation("user_created_media")
+  posts         Post[]             @relation("user_relation_post")
+  metas         UserMeta[]         @relation("user_relation_meta")
+  members       User[]             @relation("user_relation_referrer")
+  notifications NotificationUser[] @relation("users_notification")
+  setting       Json?              @db.JsonB
+  createdAt     DateTime           @default(now())
+  updatedAt     DateTime?          @updatedAt
+  transactions  Transaction[]      @relation("user_relation_transaction")
+  payments      Payment[]          @relation("user_relation_payment")
+
+  @@map("users")
+}
+
+model UserMeta {
+  id String @id @default(uuid())
+
+  key    String
+  value  Json?  @db.JsonB
+  userId String
+  user   User   @relation("user_relation_meta", fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+
+  @@index([userId], map: "userId")
+  @@map("user_metas")
+}
+
+model Role {
+  id          String   @id @default(uuid())
+  name        String   @unique(map: "roles.name_unique")
+  permissions String[]
+  users       User[]   @relation("user_relation_role")
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+
+  @@map("roles")
+}
+
+model Media {
+  id String @id @default(uuid())
+
+  title       String?       @db.Text
+  alt         String?       @db.Text
+  ext         String?
+  hash        String?       @db.Text
+  width       Int?
+  height      Int?
+  size        Float?
+  url         String?       @db.Text
+  urlRaw      String?       @db.Text
+  urlLarge    String?       @db.Text
+  urlMedium   String?       @db.Text
+  urlSmall    String?       @db.Text
+  urlTiny     String?       @db.Text
+  createdById String?
+  createdBy   User?         @relation("user_created_media", fields: [createdById], references: [id], onDelete: SetNull)
+  type        EMediaType?   @default(IMAGE)
+  source      EMediaSource? @default(LOCAL)
+
+  // important don't add Id here, just add relation as array
+  usersAvatar    User[]     @relation("media_user_avatar")
+  postsImage     Post[]     @relation("post_relation_media_image")
+  iconsCategory  Category[] @relation("category_relation_media_icon")
+  imagesCategory Category[] @relation("category_relation_media_image")
+  usersCover     User[]     @relation("media_user_cover")
+  seoMetas       SeoMeta[]  @relation("seo_meta_relation_media_image")
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+
+  @@map("media")
+}
+
+model TableTemp {
+  id String @id @default(uuid())
+
+  key   String
+  type  Int
+  value Json?  @db.JsonB
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+
+  @@map("table_temps")
+}
+
+model EmailTemplate {
+  id String @id @default(uuid())
+
+  key       String              @unique
+  variables String?
+  name      String?
+  title     String?             @db.Text
+  content   String?             @db.Text
+  langs     EmailTemplateLang[] @relation("email_template_lang")
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+
+  @@map("email_templates")
+}
+
+model EmailTemplateLang {
+  id String @id @default(uuid())
+
+  emailTemplateId String
+  emailTemplate   EmailTemplate @relation("email_template_lang", fields: [emailTemplateId], references: [id], onDelete: Cascade)
+
+  lang    ELanguage
+  title   String?   @db.Text
+  content String?   @db.Text
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+
+  @@map("email_template_lang")
+}
+
+model Post {
+  id String @id @default(uuid())
+
+  slug        String         @unique(map: "post.slug_unique")
+  title       String?        @db.Text
+  description String?        @db.Text
+  content     String?        @db.Text
+  views       Int?           @default(0)
+  status      EPostStatus?   @default(DRAFT)
+  source      String?
+  hot         Boolean?       @default(false)
+  deleted     Boolean?       @default(false)
+  publishDate DateTime       @default(now())
+  canComment  Boolean?       @default(true)
+  authorId    String?
+  author      User?          @relation("user_relation_post", fields: [authorId], references: [id], onDelete: SetNull)
+  mediaId     String?
+  media       Media?         @relation("post_relation_media_image", fields: [mediaId], references: [id], onDelete: SetNull)
+  metas       PostMeta[]     @relation("post_relation_meta")
+  categories  PostCategory[] @relation("post_relation_category")
+  related     PostRelated[]  @relation("post_relation_post_related")
+  postRelated PostRelated[]  @relation("post_related_relation_post_related")
+  seoMeta     SeoMeta?       @relation("seo_meta_relation_post")
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+
+  @@index([authorId], map: "post_author_fk")
+  @@map("posts")
+}
+
+model PostMeta {
+  id String @id @default(uuid())
+
+  key    String
+  value  String? @db.Text
+  postId String
+  post   Post    @relation("post_relation_meta", fields: [postId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+
+  @@index([postId], map: "postId")
+  @@map("post_meta")
+}
+
+model PostCategory {
+  id String @id @default(uuid())
+
+  sort       Int
+  categoryId String
+  postId     String
+  category   Category @relation("category_relation_post", fields: [categoryId], references: [id], onDelete: Cascade)
+  post       Post     @relation("post_relation_category", fields: [postId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+
+  @@unique([categoryId, postId], name: "post_relation_category_unique")
+  @@index([postId], map: "post_relation_category_post_id_fkey")
+  @@map("post_category")
+}
+
+model PostRelated {
+  id String @id @default(uuid())
+
+  sort          Int
+  postId        String
+  postRelatedId String
+  post          Post   @relation("post_relation_post_related", fields: [postId], references: [id], onDelete: Cascade)
+  postRelated   Post   @relation("post_related_relation_post_related", fields: [postRelatedId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+
+  @@unique([postId, postRelatedId], name: "post_relation_post_related_unique")
+  @@index([postRelatedId], map: "post_related_post_related_id_fkey")
+  @@map("post_related")
+}
+
+model Category {
+  id String @id @default(uuid())
+
+  slug        String         @unique(map: "category.slug_unique")
+  title       String?        @db.Text
+  description String?        @db.Text
+  status      EStatus?       @default(ACTIVE)
+  color       String?
+  sort        Int?
+  deleted     Boolean?       @default(false)
+  iconId      String?
+  mediaIcon   Media?         @relation("category_relation_media_icon", fields: [iconId], references: [id], onDelete: SetNull)
+  imageId     String?
+  mediaImage  Media?         @relation("category_relation_media_image", fields: [imageId], references: [id], onDelete: SetNull)
+  posts       PostCategory[] @relation("category_relation_post")
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+
+  @@index([iconId], map: "category_iconId_fkey")
+  @@index([imageId], map: "category_imageId_fkey")
+  @@map("categories")
+}
+
+model Notification {
+  id String @id @default(uuid())
+
+  type     String?
+  title    String?
+  content  String?  @db.Text
+  extra    Json?    @db.JsonB
+  isGlobal Boolean? @default(false)
+
+  users NotificationUser[] @relation("notification_users")
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+
+  @@map("notifications")
+}
+
+model NotificationUser {
+  id     String    @id @default(uuid())
+  read   Boolean   @default(false)
+  readAt DateTime?
+
+  userId         String
+  user           User         @relation("users_notification", fields: [userId], references: [id], onDelete: Cascade)
+  notificationId String
+  notification   Notification @relation("notification_users", fields: [notificationId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+
+  @@unique([userId, notificationId])
+  @@index([userId], map: "notification_users_user_id")
+  @@map("notification_users")
+}
+
+model SeoMeta {
+  id String @id @default(uuid())
+
+  title       String?
+  description String?
+  keywords    String?
+  mediaId     String?
+  media       Media?  @relation("seo_meta_relation_media_image", fields: [mediaId], references: [id], onDelete: SetNull)
+  postId      String? @unique
+  post        Post?   @relation("seo_meta_relation_post", fields: [postId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+
+  @@map("seo_meta")
+}
+
+model Transaction {
+  id String @id @default(uuid())
+
+  userId      String
+  user        User           @relation("user_relation_transaction", fields: [userId], references: [id], onDelete: Cascade)
+  amount      Float
+  newBalance  Float
+  type        String // enum
+  status      EStatusProcess
+  balanceType EBalanceType   @default(CREDIT)
+  refId       String?
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+
+  @@index([refId], map: "transaction_ref_id_idx")
+  @@map("transactions")
+}
+
+model Payment {
+  id String @id @default(uuid())
+
+  uniqueId String         @unique
+  userId   String
+  user     User           @relation("user_relation_payment", fields: [userId], references: [id], onDelete: Cascade)
+  amount   Float
+  price    Float
+  type     String // enum
+  status   EStatusProcess
+
+  bankCode String?
+  doneAt   DateTime?
+  content  String?   @db.Text
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+
+  @@map("payments")
+}
+
+enum EStatus {
+  ACTIVE
+  INACTIVE
+}
+
+enum EStatusProcess {
+  PENDING
+  PROCESSING
+  COMPLETED
+  CANCELED
+}
+
+enum EStatusReview {
+  APPROVED
+  PENDING
+  REJECTED
+  CANCELED
+}
+
+enum EMediaType {
+  IMAGE
+  VIDEO
+  AUDIO
+  FILE
+}
+
+enum EMediaSource {
+  LOCAL
+  REMOTE
+}
+
+enum EUserStatus {
+  PENDING
+  ACTIVE
+  HOLD
+  BAN
+  DELETE
+}
+
+enum EUserLevel {
+  BASIC
+  PRO
+  PREMIUM
+}
+
+enum EPostStatus {
+  DRAFT
+  PENDING
+  PUBLISHED
+  SCHEDULED
+  TRASH
+}
+
+enum EActivityStatus {
+  ONLINE
+  OFFLINE
+  ALWAY
+  BUSY
+}
+
+enum ELanguage {
+  en
+  vi
+}
+
+enum EBalanceType {
+  CREDIT
+  COMMISSION
+}
+
+enum EUserGender {
+  MALE
+  FEMALE
+  OTHER
+}

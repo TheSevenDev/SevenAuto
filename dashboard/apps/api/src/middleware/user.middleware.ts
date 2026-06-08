@@ -1,22 +1,26 @@
-import { IUser } from '@seven-auto/libs';
 import { Injectable, NestMiddleware } from '@nestjs/common';
-import { NextFunction, Request, Response } from 'express';
+import { IUser } from '@seven-auto/libs';
+import { NextFunction, Response } from 'express';
+import { AuthService } from 'src/modules/auth/auth.service';
 
 @Injectable()
 export class UserMiddleware implements NestMiddleware {
-  use(
-    req: Request & { user?: IUser | null },
-    _res: Response,
+  constructor(private readonly authService: AuthService) {}
+
+  async use(
+    req: Request & { user: IUser },
+    res: Response,
     next: NextFunction,
-  ): void {
-    if (req.user) {
-      next();
-      return;
-    }
-    const auth = req.headers.authorization;
-    if (auth) {
-      // Wire AuthModule + JWT/session validation here when available.
-      req.user = null;
+  ): Promise<void> {
+    if (req.user) return next();
+    const accessToken = req.headers['authorization'];
+    if (accessToken) {
+      try {
+        const user = await this.authService.getMe(accessToken);
+        req.user = user;
+      } catch {
+        req.user = null;
+      }
     }
     next();
   }

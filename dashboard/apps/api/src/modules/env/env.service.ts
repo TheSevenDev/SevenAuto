@@ -1,7 +1,8 @@
-import * as envalid from 'envalid';
-import { IDotEnv } from './env.interface';
 import { Injectable } from '@nestjs/common';
+import * as envalid from 'envalid';
 import { transformBoolean } from 'src/transform/transform.boolean';
+
+import { IDotEnv } from './env.interface';
 
 @Injectable()
 export class EnvService {
@@ -101,24 +102,24 @@ export class EnvService {
     return this.env.DATABASE_URL;
   }
 
-  get MYSQL_HOST(): string {
-    return this.env.MYSQL_HOST;
+  get DATABASE_HOST(): string {
+    return this.env.DATABASE_HOST;
   }
 
-  get MYSQL_PORT(): number {
-    return Number(this.env.MYSQL_PORT);
+  get DATABASE_PORT(): number {
+    return Number(this.env.DATABASE_PORT);
   }
 
-  get MYSQL_DATABASE(): string {
-    return this.env.MYSQL_DATABASE;
+  get DATABASE_DATABASE(): string {
+    return this.env.DATABASE_DATABASE;
   }
 
-  get MYSQL_USER(): string {
-    return this.env.MYSQL_USER;
+  get DATABASE_USER(): string {
+    return this.env.DATABASE_USER;
   }
 
-  get MYSQL_PASSWORD(): string {
-    return this.env.MYSQL_PASSWORD;
+  get DATABASE_PASSWORD(): string {
+    return this.env.DATABASE_PASSWORD;
   }
 
   //Redis
@@ -277,11 +278,11 @@ export class EnvService {
 
       //Database
       DATABASE_URL: envalid.str(),
-      MYSQL_HOST: envalid.str(),
-      MYSQL_PORT: envalid.num(),
-      MYSQL_DATABASE: envalid.str(),
-      MYSQL_USER: envalid.str(),
-      MYSQL_PASSWORD: envalid.str(),
+      DATABASE_HOST: envalid.str(),
+      DATABASE_PORT: envalid.num(),
+      DATABASE_DATABASE: envalid.str(),
+      DATABASE_USER: envalid.str(),
+      DATABASE_PASSWORD: envalid.str(),
 
       //Redis
       REDIS_PORT: envalid.num(),

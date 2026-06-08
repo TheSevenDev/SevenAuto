@@ -1,21 +1,21 @@
 import { IUser } from './user';
 import { IBaseEntity } from './utils';
 
-export interface IRole extends IBaseEntity {
+export type IRole = IBaseEntity & {
   name?: string;
   permissions?: string[];
   users?: IUser[];
-}
+};
 
 // Action
-export interface IRoleCreate {
+export type IRoleCreate = {
   name: string;
-}
+};
 
-export interface IRoleUpdate extends IRoleCreate {
+export type IRoleUpdate = IRoleCreate & {
   id: string;
-}
+};
 
-export interface IPermissionUpdate {
+export type IPermissionUpdate = {
   key: string;
-}
+};

@@ -1,17 +1,18 @@
-import { filterXSS, getDefaultWhiteList, escapeAttrValue } from 'xss';
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   ArgumentMetadata,
   Injectable,
   Logger,
   PipeTransform,
 } from '@nestjs/common';
+import { escapeAttrValue, filterXSS, getDefaultWhiteList } from 'xss';
 
 const whiteList = {
   ...getDefaultWhiteList(),
   figure: ['class', 'style'],
   figcaption: ['class', 'style'],
   img: ['src', 'alt', 'title', 'width', 'height'],
-  iframe: ['src', 'title', 'width', 'hight'],
+  iframe: ['src', 'title', 'width', 'height'],
   oembed: ['url'],
 };
 
@@ -28,7 +29,6 @@ const xssOptions = {
   whiteList,
   stripIgnoreTagBody: true,
   stripIgnoreTag: true,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onTagAttr(tag: any, name: any, val: any) {
     if (tag === 'img' && name === 'src' && val.includes('__ASSETS_URL__')) {
       return `${name}="${escapeAttrValue(val)}"`;
@@ -36,11 +36,31 @@ const xssOptions = {
   },
 };
 
+const cleanXSS = (val: any): any => {
+  if (val == null) return val;
+  if (typeof val === 'string') {
+    return filterXSS(val, xssOptions).trim();
+  }
+  if (Array.isArray(val)) {
+    return val.map((item) => cleanXSS(item));
+  }
+  if (typeof val === 'object') {
+    const proto = Object.getPrototypeOf(val);
+    if (proto === null || proto === Object.prototype) {
+      const cleanObj: Record<string, any> = {};
+      for (const [key, value] of Object.entries(val)) {
+        cleanObj[key] = cleanXSS(value);
+      }
+      return cleanObj;
+    }
+  }
+  return val;
+};
+
 @Injectable()
 export class XSSFilterPipe implements PipeTransform {
   private readonly logger = new Logger(XSSFilterPipe.name);
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   transform(value: any, metadata: ArgumentMetadata): any {
     try {
       if (
@@ -49,24 +69,7 @@ export class XSSFilterPipe implements PipeTransform {
       ) {
         return value;
       }
-      if (value == null) return value;
-
-      if (typeof value === 'object') {
-        for (const [key, val] of Object.entries(value)) {
-          if (typeof val === 'string') {
-            (value as Record<string, unknown>)[key] = filterXSS(
-              val,
-              xssOptions,
-            ).trim();
-          }
-        }
-      }
-
-      if (typeof value === 'string') {
-        return filterXSS(value, xssOptions).trim();
-      }
-
-      return value;
+      return cleanXSS(value);
     } catch (error) {
       this.logger.error('XSS filter error', error);
       return value;

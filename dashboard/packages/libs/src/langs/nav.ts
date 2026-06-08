@@ -1,0 +1,41 @@
+const navEnLang = {
+  home: 'Home',
+  posts: 'Posts',
+  other: 'Other',
+  dashboard: 'Dashboard',
+  settings: 'Settings',
+  company: 'Company',
+  payment: 'Payment',
+  deposit: 'Deposit',
+  about_us: 'About us',
+  contact_us: 'Contact us',
+  faqs: 'FAQs',
+  pricing: 'Pricing',
+  privacy_policy: 'Privacy Policy',
+  terms_conditions: 'Terms Conditions',
+  technical: 'Technical',
+  legal: 'Legal',
+  features: 'Features',
+};
+
+const navViLang = {
+  home: 'Trang chủ',
+  posts: 'Bài viết',
+  other: 'Khác',
+  dashboard: 'Bảng điều khiển',
+  settings: 'Cài đặt',
+  company: 'Công ty',
+  payment: 'Thanh toán',
+  deposit: 'Nạp tiền',
+  about_us: 'Về chúng tôi',
+  contact_us: 'Liên hệ',
+  faqs: 'Câu hỏi thường gặp',
+  pricing: 'Bảng giá',
+  privacy_policy: 'Chính sách bảo mật',
+  terms_conditions: 'Điều khoản và điều kiện',
+  technical: 'Kỹ thuật',
+  legal: 'Pháp lý',
+  features: 'Tính năng',
+};
+
+export { navEnLang, navViLang };

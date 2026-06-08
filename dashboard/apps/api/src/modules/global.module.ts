@@ -1,8 +1,9 @@
-import { Global, Module } from '@nestjs/common';
 import { HttpModule } from '@nestjs/axios';
+import { Global, Module } from '@nestjs/common';
 import { ApiHelper } from 'src/helpers/api.helper';
-import { LoggerService } from 'src/modules/logger/logger.service';
+import { OptionHelper } from 'src/helpers/options.helper';
 import { EnvService } from 'src/modules/env/env.service';
+import { LoggerService } from 'src/modules/logger/logger.service';
 
 @Global()
 @Module({
@@ -12,7 +13,7 @@ import { EnvService } from 'src/modules/env/env.service';
       maxRedirects: 5,
     }),
   ],
-  providers: [ApiHelper, LoggerService, EnvService],
-  exports: [HttpModule, ApiHelper, LoggerService, EnvService],
+  providers: [ApiHelper, LoggerService, EnvService, OptionHelper],
+  exports: [HttpModule, ApiHelper, LoggerService, EnvService, OptionHelper],
 })
 export class GlobalModule {}

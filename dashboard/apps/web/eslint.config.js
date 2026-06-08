@@ -1,4 +1,9 @@
-import { nextJsConfig } from "@seven-auto/eslint-config/next-js";
+import { nextJsConfig } from '@seven-auto/eslint-config/next-js';
 
 /** @type {import("eslint").Linter.Config[]} */
-export default nextJsConfig;
+export default [
+  ...nextJsConfig,
+  {
+    ignores: ['jest.config.cjs'],
+  },
+];

@@ -26,19 +26,19 @@ pnpm dev
 
 Mỗi lần `git commit`, hook `pre-commit` chạy (trừ khi `CI` được set): `lint` → `check-types` → `format:check` → `build` trong `dashboard/`. Bỏ qua hook (không khuyến khích): `git commit --no-verify`.
 
-- Web mặc định: [http://localhost:3000](http://localhost:3000)
+- Web mặc định: [http://localhost:7272](http://localhost:7272)
 - API: cổng và prefix lấy từ biến môi trường (`PORT`, `API_VERSION`); Swagger (nếu bật) xem log khi khởi động Nest.
 
 ## Lệnh chính (trong `dashboard/`)
 
-| Lệnh | Mô tả |
-|------|--------|
-| `pnpm dev` | Chạy dev toàn monorepo (turbo) |
-| `pnpm dev:web` / `pnpm dev:api` | Chỉ web hoặc chỉ API |
-| `pnpm build` | Build production |
-| `pnpm lint` | ESLint |
-| `pnpm check-types` | Kiểm tra TypeScript |
-| `pnpm format:check` | Kiểm tra Prettier (không ghi file) |
+| Lệnh                            | Mô tả                              |
+| ------------------------------- | ---------------------------------- |
+| `pnpm dev`                      | Chạy dev toàn monorepo (turbo)     |
+| `pnpm dev:web` / `pnpm dev:api` | Chỉ web hoặc chỉ API               |
+| `pnpm build`                    | Build production                   |
+| `pnpm lint`                     | ESLint                             |
+| `pnpm check-types`              | Kiểm tra TypeScript                |
+| `pnpm format:check`             | Kiểm tra Prettier (không ghi file) |
 
 ## Git hooks (Husky)
 
@@ -47,13 +47,13 @@ Mỗi lần `git commit`, hook `pre-commit` chạy (trừ khi `CI` được set)
 
 ## Tài liệu thêm
 
-| File | Nội dung |
-|------|----------|
-| [docs/getting-started.md](docs/getting-started.md) | Cấu trúc repo, env API, gợi ý triển khai |
-| [docs/getting-started-vi.md](docs/getting-started-vi.md) | Bản tóm tắt tiếng Việt |
-| [AGENTS.md](AGENTS.md) | Ghi chú cho agent / contributor |
-| [dashboard/README.md](dashboard/README.md) | Chi tiết app `web` và `api` trong monorepo |
-| [tools/README.md](tools/README.md) | Placeholder công cụ phụ trợ (không chạy app) |
+| File                                                     | Nội dung                                     |
+| -------------------------------------------------------- | -------------------------------------------- |
+| [docs/getting-started.md](docs/getting-started.md)       | Cấu trúc repo, env API, gợi ý triển khai     |
+| [docs/getting-started-vi.md](docs/getting-started-vi.md) | Bản tóm tắt tiếng Việt                       |
+| [AGENTS.md](AGENTS.md)                                   | Ghi chú cho agent / contributor              |
+| [dashboard/README.md](dashboard/README.md)               | Chi tiết app `web` và `api` trong monorepo   |
+| [tools/README.md](tools/README.md)                       | Placeholder công cụ phụ trợ (không chạy app) |
 
 ## Cấu trúc thư mục
 

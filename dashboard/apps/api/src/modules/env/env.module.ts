@@ -1,7 +1,8 @@
 import { Global, Module } from '@nestjs/common';
-import { EnvService } from './env.service';
 import * as dotenv from 'dotenv';
 import * as path from 'path';
+
+import { EnvService } from './env.service';
 
 let envFileName = `.env`;
 const envFilePath = path.resolve(envFileName);

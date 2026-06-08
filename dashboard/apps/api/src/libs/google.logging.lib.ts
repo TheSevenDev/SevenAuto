@@ -1,17 +1,29 @@
-import { EnvService } from 'src/modules/env/env.service';
 import { Injectable } from '@nestjs/common';
-import { Logging } from '@google-cloud/logging';
+import { EnvService } from 'src/modules/env/env.service';
+
+type CloudLog = ReturnType<
+  InstanceType<typeof import('@google-cloud/logging').Logging>['log']
+>;
 
 @Injectable()
 class GoogleLogging {
-  private logging;
-  private log;
+  private log: CloudLog | undefined;
   private readonly envService = new EnvService();
+  private clientReady: Promise<void> | undefined;
 
-  constructor() {
+  private async ensureClient(): Promise<void> {
     if (!this.envService.GOOGLE_LOG) return;
-    this.logging = new Logging();
-    this.log = this.logging.log(this.envService.GOOGLE_LOG_NAME);
+    if (this.log) return;
+
+    if (!this.clientReady) {
+      this.clientReady = (async () => {
+        const { Logging } = await import('@google-cloud/logging');
+        const logging = new Logging();
+        this.log = logging.log(this.envService.GOOGLE_LOG_NAME);
+      })();
+    }
+
+    await this.clientReady;
   }
 
   baseLog = async (
@@ -20,7 +32,10 @@ class GoogleLogging {
     context?: string,
     trace?: string,
   ): Promise<void> => {
-    if (!this.envService.GOOGLE_LOG || !this.log) return;
+    if (!this.envService.GOOGLE_LOG) return;
+    await this.ensureClient();
+    if (!this.log) return;
+
     let text = `[${this.envService.GOOGLE_LOG_NAME}] - `;
     if (context) {
       text += `${context}\n`;
